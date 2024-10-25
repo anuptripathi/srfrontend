@@ -93,21 +93,7 @@ export default function CreateProductModal({
               helperText={response?.error}
               error={!!response?.error}
             />
-            <Button
-              component="label"
-              variant="outlined"
-              startIcon={<CloudUploadIcon />}
-            >
-              Upload File
-              <input
-                type="file"
-                name="image"
-                style={fileInputStyles}
-                onChange={(e) =>
-                  e.target.files && setFileName(e.target.files[0].name)
-                }
-              ></input>
-            </Button>
+
             <Typography>{fileName}</Typography>
             <Button type="submit" variant="contained">
               Submit

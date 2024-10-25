@@ -2,15 +2,11 @@
 
 import { revalidateTag } from "next/cache";
 import { getHeaders, post } from "../../common/util/fetch";
-import { API_URL } from "@/app/common/constants/api";
+import { API_URL, API_URL_BACKEND } from "@/app/common/constants/api";
 
 export default async function createProduct(formData: FormData) {
-  const response = await post("products", formData);
-  const productImage = formData.get("image");
-  if (productImage instanceof File && !response.error) {
-    await uploadProductImage(response.data.id, productImage);
-  }
-  //revalidateTag("products");
+  const response = await post(`${API_URL_BACKEND}/products`, formData);
+  revalidateTag("products");
   return response;
 }
 
