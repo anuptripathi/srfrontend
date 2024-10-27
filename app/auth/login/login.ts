@@ -12,16 +12,20 @@ export default async function login(
   _prevState: FormResponse,
   formData: FormData
 ) {
-  const res = await fetch(`${API_URL}/auth/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(Object.fromEntries(formData)),
-  });
-  const parsedRes = await res.json();
-  if (!res.ok) {
-    return { error: getErrorMessage(parsedRes) };
+  try {
+    const res = await fetch(`${API_URL}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(Object.fromEntries(formData)),
+    });
+    const parsedRes = await res.json();
+    if (!res.ok) {
+      return { error: getErrorMessage(parsedRes) };
+    }
+    setAuthCookie(res);
+  } catch (err) {
+    return { error: "Unable to process, please try again later." };
   }
-  setAuthCookie(res);
   redirect("/");
 }
 

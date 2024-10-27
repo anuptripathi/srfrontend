@@ -8,9 +8,13 @@ export default async function createUser(
   _prevState: FormResponse,
   formData: FormData
 ) {
-  const { error } = await post("users", formData);
-  if (error) {
-    return { error };
+  try {
+    const { error } = await post("users", formData);
+    if (error) {
+      return { error };
+    }
+  } catch (err) {
+    return { error: "Please try again later." };
   }
   redirect("/");
 }

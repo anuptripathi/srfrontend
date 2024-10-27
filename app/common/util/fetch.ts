@@ -7,17 +7,21 @@ export const getHeaders = () => ({
 });
 
 export const post = async (path: string, data: FormData | object) => {
-  const body = data instanceof FormData ? Object.fromEntries(data) : data;
-  const res = await fetch(`${API_URL}/${path}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...getHeaders() },
-    body: JSON.stringify(body),
-  });
-  const parsedRes = await res.json();
-  if (!res.ok) {
-    return { error: getErrorMessage(parsedRes) };
+  try {
+    const body = data instanceof FormData ? Object.fromEntries(data) : data;
+    const res = await fetch(`${API_URL}/${path}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...getHeaders() },
+      body: JSON.stringify(body),
+    });
+    const parsedRes = await res.json();
+    if (!res.ok) {
+      return { error: getErrorMessage(parsedRes) };
+    }
+    return { error: "", data: parsedRes };
+  } catch (err) {
+    return { error: "Unable to proces. try again later." };
   }
-  return { error: "", data: parsedRes };
 };
 
 export const get = async <T>(
