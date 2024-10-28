@@ -42,7 +42,7 @@ export default function Header({ logout }: HeaderProps) {
 
   return (
     <>
-      <AppBar position="fixed">
+      <AppBar position="static">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <ShoppingBasketIcon
@@ -146,7 +146,6 @@ export default function Header({ logout }: HeaderProps) {
           </Toolbar>
         </Container>
       </AppBar>
-      <Sidebar />
     </>
   );
 }
