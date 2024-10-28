@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Container, CssBaseline } from "@mui/material";
-import Header from "./header/header";
+import Header from "./menus/header";
 import Providers from "./providers";
 import authenticated from "./auth/actions/authenticated";
 import logout from "./auth/logout";
