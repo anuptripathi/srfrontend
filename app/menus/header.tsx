@@ -19,6 +19,7 @@ import Link from "next/link";
 import { routes, unauthenticatedRoutes } from "../common/constants/routes";
 import { useRouter } from "next/navigation";
 import Sidebar from "./sidebar";
+import React from "react";
 
 interface HeaderProps {
   logout: () => Promise<void>;
@@ -27,6 +28,11 @@ interface HeaderProps {
 export default function Header({ logout }: HeaderProps) {
   const isAuthenticated = useContext(AuthContext);
   const router = useRouter();
+  React.useEffect(() => {
+    if (!isAuthenticated) {
+      router.push("/auth/login");
+    }
+  }, [isAuthenticated, router]);
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 
