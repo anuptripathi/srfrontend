@@ -32,9 +32,4 @@ export const routes = [
     path: "/permissions",
     icon: "MailIcon",
   },
-  {
-    title: "Logout",
-    path: "/",
-    icon: "MailIcon",
-  },
 ];
