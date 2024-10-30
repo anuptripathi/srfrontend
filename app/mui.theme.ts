@@ -1,5 +1,3 @@
-"use client";
-
 import { createTheme } from "@mui/material";
 
 const lightTheme = createTheme({
@@ -49,6 +47,21 @@ const lightTheme = createTheme({
       styleOverrides: {
         colorPrimary: {
           backgroundColor: "#091057",
+        },
+      },
+    },
+    MuiTableHead: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#CBDCEB", // Background color for the table header
+        },
+      },
+    },
+    MuiTableCell: {
+      styleOverrides: {
+        head: {
+          color: "black", // Text color for the header cells
+          fontWeight: "bold", // Font weight for the header cells
         },
       },
     },
