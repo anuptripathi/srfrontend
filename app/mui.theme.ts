@@ -59,9 +59,15 @@ const lightTheme = createTheme({
     },
     MuiTableCell: {
       styleOverrides: {
+        root: {
+          paddingTop: "2px",
+          paddingBottom: "2px",
+        },
         head: {
           color: "black", // Text color for the header cells
           fontWeight: "bold", // Font weight for the header cells
+          paddingTop: "4px",
+          paddingBottom: "4px",
         },
       },
     },

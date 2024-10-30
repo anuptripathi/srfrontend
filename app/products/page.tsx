@@ -58,7 +58,7 @@ export default function ProductTablePage() {
   };
 
   return (
-    <Container maxWidth={false} sx={{ mt: 4 }}>
+    <Container maxWidth={false}>
       <Breadcrumb items={[{ name: "Home", link: "/" }, { name: "Products" }]} />
       <StyledTable columns={["Name", "Description", "Price", "Actions"]}>
         {products.map((product, index) => (
