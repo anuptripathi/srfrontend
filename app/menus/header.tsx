@@ -17,7 +17,7 @@ import Link from "next/link";
 import { routes, unauthenticatedRoutes } from "../common/constants/routes";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { AppBar, Drawer, DrawerHeader } from "./sidebar";
+import { AppBar, Drawer, DrawerHeader } from "./drawer";
 import {
   Button,
   Divider,
