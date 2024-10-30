@@ -1,6 +1,5 @@
 "use client";
 
-import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
@@ -10,7 +9,6 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { AuthContext } from "../auth/auth-context";
@@ -19,12 +17,39 @@ import Link from "next/link";
 import { routes, unauthenticatedRoutes } from "../common/constants/routes";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { AppBar, Drawer, DrawerHeader } from "./sidebar";
+import {
+  Button,
+  Divider,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  useTheme,
+} from "@mui/material";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import MailIcon from "@mui/icons-material/Mail";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import NextLink from "next/link";
 
 interface HeaderProps {
   logout: () => Promise<void>;
 }
 
 export default function Header({ logout }: HeaderProps) {
+  const theme = useTheme();
+  const [open, setOpen] = React.useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
   const isAuthenticated = useContext(AuthContext);
   const router = useRouter();
 
@@ -39,113 +64,137 @@ export default function Header({ logout }: HeaderProps) {
   };
 
   const pages = isAuthenticated ? routes : unauthenticatedRoutes;
+  if (!isAuthenticated) {
+    return <></>;
+  }
+
+  const Logo = ({ open }: any) =>
+    open && (
+      <>
+        <ShoppingBasketIcon sx={{ mr: 1 }} />
+        <Typography
+          variant="h6"
+          noWrap
+          component={Link}
+          href="/"
+          sx={{
+            mr: 2,
+            display: { xs: "flex" },
+            fontFamily: "monospace",
+            fontWeight: 700,
+            letterSpacing: ".3rem",
+            color: "inherit",
+            textDecoration: "none",
+          }}
+        >
+          Shoppy
+        </Typography>
+      </>
+    );
 
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="fixed" open={open}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <ShoppingBasketIcon
-              sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-            />
-            <Typography
-              variant="h6"
-              noWrap
-              component={Link}
-              href="/"
-              sx={{
-                mr: 2,
-                display: { xs: "none", md: "flex" },
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              Shoppy
-            </Typography>
-            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleOpenNavMenu}
-                color="inherit"
-              >
-                <MenuIcon />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorElNav}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-                open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
-                sx={{
-                  display: { xs: "block", md: "none" },
-                }}
-              >
-                {pages.map((page) => (
-                  <MenuItem
-                    key={page.title}
-                    onClick={() => {
-                      router.push(page.path);
-                      handleCloseNavMenu();
-                    }}
-                  >
-                    <Typography textAlign="center">{page.title}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box>
-            <ShoppingBasketIcon
-              sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
-            />
-            <Typography
-              variant="h5"
-              noWrap
-              component="a"
-              href="#app-bar-with-responsive-menu"
-              sx={{
-                mr: 2,
-                display: { xs: "flex", md: "none" },
-                flexGrow: 1,
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              Shoppy
-            </Typography>
-            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {pages.map((page) => (
-                <Button
-                  key={page.title}
-                  onClick={() => {
-                    router.push(page.path);
-                    handleCloseNavMenu();
-                  }}
-                  sx={{ my: 2, color: "white", display: "block" }}
+            <Box sx={{ flexGrow: 1, display: "flex" }}>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  onClick={handleDrawerOpen}
+                  edge="start"
+                  sx={[
+                    {
+                      marginRight: 5,
+                    },
+                    open && { display: "none" },
+                  ]}
                 >
-                  {page.title}
-                </Button>
-              ))}
+                  <MenuIcon />
+                </IconButton>
+                <Logo open={!open} />
+              </Box>
             </Box>
             {isAuthenticated && <Settings logout={logout} />}
           </Toolbar>
         </Container>
       </AppBar>
+      <Drawer variant="permanent" open={open}>
+        <DrawerHeader>
+          <Logo open={open} />
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === "rtl" ? (
+              <ChevronRightIcon />
+            ) : (
+              <ChevronLeftIcon />
+            )}
+          </IconButton>
+        </DrawerHeader>
+        <Divider />
+        <List>
+          {pages.map((page, index) => (
+            <ListItem key={page.title} disablePadding sx={{ display: "block" }}>
+              <ListItemButton
+                sx={[
+                  {
+                    minHeight: 48,
+                    px: 2.5,
+                  },
+                  open
+                    ? {
+                        justifyContent: "initial",
+                      }
+                    : {
+                        justifyContent: "center",
+                      },
+                ]}
+                component={Link}
+                href={page.path}
+              >
+                <ListItemIcon
+                  sx={[
+                    {
+                      minWidth: 0,
+                      justifyContent: "center",
+                    },
+                    open
+                      ? {
+                          mr: 3,
+                        }
+                      : {
+                          mr: "auto",
+                        },
+                  ]}
+                >
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText
+                  primary={page.title}
+                  sx={[
+                    open
+                      ? {
+                          opacity: 1,
+                        }
+                      : {
+                          opacity: 0,
+                        },
+                  ]}
+                />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+        <Divider />
+        <Button
+          key="Logout"
+          onClick={async () => {
+            await logout();
+          }}
+        >
+          <Typography textAlign="center">Logout</Typography>
+        </Button>
+      </Drawer>
     </>
   );
 }
