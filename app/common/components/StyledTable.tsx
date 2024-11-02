@@ -36,7 +36,7 @@ export default function StyledTable({
         <TableBody>
           {isLoading ? (
             <>
-              {[...Array(5)].map((_, index) => (
+              {[...Array(10)].map((_, index) => (
                 <TableRow key={index}>
                   <TableCell>
                     <Skeleton variant="text" />
