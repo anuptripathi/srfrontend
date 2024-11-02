@@ -8,14 +8,17 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { SxProps } from "@mui/system";
+import { Skeleton } from "@mui/material";
 
 interface StyledTableProps {
+  isLoading: boolean;
   columns: string[];
   children: React.ReactNode;
   containerSx?: SxProps;
 }
 
 export default function StyledTable({
+  isLoading,
   columns,
   children,
   containerSx,
@@ -30,7 +33,30 @@ export default function StyledTable({
             ))}
           </TableRow>
         </TableHead>
-        <TableBody>{children}</TableBody>
+        <TableBody>
+          {isLoading ? (
+            <>
+              {[...Array(5)].map((_, index) => (
+                <TableRow key={index}>
+                  <TableCell>
+                    <Skeleton variant="text" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton variant="text" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton variant="text" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton variant="circular" width={40} height={40} />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </>
+          ) : (
+            children
+          )}
+        </TableBody>
       </Table>
     </TableContainer>
   );

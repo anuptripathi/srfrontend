@@ -16,17 +16,23 @@ import { Product } from "./interfaces/product.interface";
 const initialProducts: Product[] = [];
 
 export default function ProductTablePage() {
-  //const myprods =
   const [products, setProducts] = useState(initialProducts);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedProductId, setSelectedProductId] = useState<
     number | string | null
   >(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await getProducts();
-      setProducts(response);
+      try {
+        const response = await getProducts();
+        setProducts(response);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setIsLoading(false);
+      }
     };
     fetchData();
   }, []);
@@ -45,13 +51,11 @@ export default function ProductTablePage() {
   };
 
   const handleEdit = () => {
-    // Implement edit logic here
     console.log("Edit product", selectedProductId);
     handleMenuClose();
   };
 
   const handleDelete = () => {
-    // Implement delete logic here
     console.log("Delete product", selectedProductId);
     setProducts(
       products.filter((product) => product._id !== selectedProductId)
@@ -62,7 +66,11 @@ export default function ProductTablePage() {
   return (
     <Container maxWidth={false}>
       <Breadcrumb items={[{ name: "Home", link: "/" }, { name: "Products" }]} />
-      <StyledTable columns={["Name", "Description", "Price", "Actions"]}>
+
+      <StyledTable
+        isLoading={isLoading}
+        columns={["Name", "Description", "Price", "Actions"]}
+      >
         {products.map((product, index) => (
           <TableRow
             key={product._id}
