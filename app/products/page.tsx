@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
@@ -10,30 +10,30 @@ import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import StyledTable from "../common/components/StyledTable";
 import Breadcrumb from "../common/components/BreadCrumb";
+import getProducts from "./actions/get-products";
+import { Product } from "./interfaces/product.interface";
 
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-}
-
-const initialProducts: Product[] = [
-  { id: 1, name: "Product 1", description: "Description 1", price: 100 },
-  { id: 2, name: "Product 2", description: "Description 2", price: 200 },
-  { id: 3, name: "Product 3", description: "Description 3", price: 300 },
-];
+const initialProducts: Product[] = [];
 
 export default function ProductTablePage() {
+  //const myprods =
   const [products, setProducts] = useState(initialProducts);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedProductId, setSelectedProductId] = useState<number | null>(
-    null
-  );
+  const [selectedProductId, setSelectedProductId] = useState<
+    number | string | null
+  >(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await getProducts();
+      setProducts(response);
+    };
+    fetchData();
+  }, []);
 
   const handleMenuOpen = (
     event: React.MouseEvent<HTMLElement>,
-    productId: number
+    productId: number | string
   ) => {
     setAnchorEl(event.currentTarget);
     setSelectedProductId(productId);
@@ -53,7 +53,9 @@ export default function ProductTablePage() {
   const handleDelete = () => {
     // Implement delete logic here
     console.log("Delete product", selectedProductId);
-    setProducts(products.filter((product) => product.id !== selectedProductId));
+    setProducts(
+      products.filter((product) => product._id !== selectedProductId)
+    );
     handleMenuClose();
   };
 
@@ -63,7 +65,7 @@ export default function ProductTablePage() {
       <StyledTable columns={["Name", "Description", "Price", "Actions"]}>
         {products.map((product, index) => (
           <TableRow
-            key={product.id}
+            key={product._id}
             sx={{ backgroundColor: index % 2 === 0 ? "#f5f5f5" : "white" }}
           >
             <TableCell>{product.name}</TableCell>
@@ -72,16 +74,16 @@ export default function ProductTablePage() {
             <TableCell>
               <IconButton
                 aria-label="actions"
-                aria-controls={`menu-${product.id}`}
+                aria-controls={`menu-${product._id}`}
                 aria-haspopup="true"
-                onClick={(event) => handleMenuOpen(event, product.id)}
+                onClick={(event) => handleMenuOpen(event, product._id)}
               >
                 <MoreVertIcon />
               </IconButton>
               <Menu
-                id={`menu-${product.id}`}
+                id={`menu-${product._id}`}
                 anchorEl={anchorEl}
-                open={Boolean(anchorEl) && selectedProductId === product.id}
+                open={Boolean(anchorEl) && selectedProductId === product._id}
                 onClose={handleMenuClose}
               >
                 <MenuItem onClick={handleEdit}>Edit</MenuItem>
