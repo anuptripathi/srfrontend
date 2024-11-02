@@ -12,6 +12,7 @@ import StyledTable from "../common/components/StyledTable";
 import Breadcrumb from "../common/components/BreadCrumb";
 import getProducts from "./actions/get-products";
 import { Product } from "./interfaces/product.interface";
+import PaginationComponent from "../common/components/Pagination";
 
 const initialProducts: Product[] = [];
 
@@ -22,6 +23,17 @@ export default function ProductTablePage() {
     number | string | null
   >(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 10; // You can dynamically calculate this value based on data
+
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    page: number
+  ) => {
+    setCurrentPage(page);
+    // Fetch data for the selected page here
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,7 +76,7 @@ export default function ProductTablePage() {
   };
 
   return (
-    <Container maxWidth={false}>
+    <>
       <Breadcrumb items={[{ name: "Home", link: "/" }, { name: "Products" }]} />
 
       <StyledTable
@@ -101,6 +113,11 @@ export default function ProductTablePage() {
           </TableRow>
         ))}
       </StyledTable>
-    </Container>
+      <PaginationComponent
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
+    </>
   );
 }

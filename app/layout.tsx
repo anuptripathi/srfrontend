@@ -6,6 +6,7 @@ import Header from "./menus/header";
 import Providers from "./providers";
 import authenticated from "./auth/actions/authenticated";
 import logout from "./auth/logout";
+import { width } from "@mui/system";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,7 +29,11 @@ export default async function RootLayout({
           <CssBaseline />
           <Box sx={{ display: "flex" }}>
             <Header logout={logout} />
-            <Container className={isAuthenticated ? "mt-20" : ""}>
+            <Container
+              maxWidth={false}
+              sx={{ width: "100%" }}
+              className={isAuthenticated ? "mt-20 mb-20" : ""}
+            >
               {children}
             </Container>
           </Box>
