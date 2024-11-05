@@ -23,8 +23,8 @@ export const routes = [
     icon: "MailIcon",
   },
   {
-    title: "Roles",
-    path: "/roles",
+    title: "Users",
+    path: "/users",
     icon: "MailIcon",
   },
   {

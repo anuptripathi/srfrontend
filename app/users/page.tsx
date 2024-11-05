@@ -46,7 +46,6 @@ export default function UserTablePage() {
     try {
       const offset = (page - 1) * limit;
       const response = await getUsers(limit, offset);
-      console.log("responseresponseresponseresponseresponse", response);
       setIsCursorBased(response.cursorBased);
       setUsers(response.data);
       if (response.totalRecords && response.totalRecords > 0) {
