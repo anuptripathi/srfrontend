@@ -1,10 +1,10 @@
-import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
+import AnalyticsIcon from "@mui/icons-material/Analytics";
 import Typography from "@mui/material/Typography/Typography";
 import Link from "next/link";
 export const Logo = ({ open }: any) =>
   open && (
     <>
-      <ShoppingBasketIcon sx={{ mr: 1 }} />
+      <AnalyticsIcon sx={{ mr: 1 }} />
       <Typography
         variant="h6"
         noWrap
