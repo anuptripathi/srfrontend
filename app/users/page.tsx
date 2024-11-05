@@ -12,9 +12,26 @@ import StyledTable from "../common/components/StyledTable";
 import Breadcrumb from "../common/components/BreadCrumb";
 import { User } from "./interfaces/user.interface";
 import PaginationComponent from "../common/components/Pagination";
+import CloseIcon from "@mui/icons-material/Close";
 import Alert from "@mui/material/Alert";
-import { Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Drawer,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Link,
+  Radio,
+  RadioGroup,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import getUsers from "./actions/get-users";
+import createUser from "./actions/create-user";
+import { useFormState } from "react-dom";
+import { UserTypes } from "../common/interfaces/user-types-enum";
 
 export default function UserTablePage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -31,6 +48,31 @@ export default function UserTablePage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState<number>(0);
+
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const [formValues, setFormValues] = useState({
+    name: "",
+    email: "",
+    password: "",
+    uType: UserTypes.ENDUSER,
+    roleId: "defaultRoleId123",
+  });
+
+  const handleDrawerOpen = () => {
+    setIsDrawerOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setIsDrawerOpen(false);
+  };
+
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormValues({
+      ...formValues,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
@@ -88,9 +130,35 @@ export default function UserTablePage() {
     handleMenuClose();
   };
 
+  const handleFormSubmit = async () => {
+    try {
+      const res = await createUser(formValues); // Assuming addUser is an async function that posts to your backend
+      if (res?.error) {
+        console.log("Failed to add user:", res.error);
+        return;
+      }
+      handleDrawerClose();
+      fetchData(limit, currentPage); // Refresh the user list after adding a new user
+    } catch (error) {
+      console.error("Failed to add user:", error);
+    }
+  };
+
   return (
     <>
       <Breadcrumb items={[{ name: "Home", link: "/" }, { name: "Users" }]} />
+
+      <Stack direction="row" justifyContent="flex-end" sx={{ mt: 2, mb: 2 }}>
+        <Link
+          sx={{
+            cursor: "pointer",
+            textDecoration: "none",
+          }}
+          onClick={handleDrawerOpen}
+        >
+          Add User
+        </Link>
+      </Stack>
 
       {!users && (
         <Alert severity="error">
@@ -155,6 +223,93 @@ export default function UserTablePage() {
           </Stack>
         </>
       )}
+
+      {/* Drawer for adding a new user */}
+      <Drawer
+        anchor="right"
+        open={isDrawerOpen}
+        onClose={() => {}}
+        sx={{
+          zIndex: (theme) => theme.zIndex.modal + 1, // Ensures the drawer is above all other elements
+        }}
+      >
+        <Box
+          sx={{ width: 300, p: 3, position: "relative" }}
+          role="presentation"
+        >
+          <IconButton
+            sx={{ position: "absolute", top: 8, right: 8 }}
+            onClick={handleDrawerClose}
+          >
+            <CloseIcon />
+          </IconButton>
+
+          <Typography variant="h6" gutterBottom>
+            Add New User
+          </Typography>
+          <form action={handleFormSubmit} className="w-full max-w-xs">
+            <Stack spacing={2}>
+              <TextField
+                label="Name"
+                name="name"
+                fullWidth
+                margin="normal"
+                value={formValues.name}
+                onChange={handleFormChange}
+              />
+              <TextField
+                label="Email"
+                name="email"
+                fullWidth
+                margin="normal"
+                value={formValues.email}
+                onChange={handleFormChange}
+              />
+              <TextField
+                label="Password"
+                name="password"
+                fullWidth
+                type="password"
+                margin="normal"
+                value={formValues.password}
+                onChange={handleFormChange}
+              />
+
+              <FormControl component="fieldset">
+                <FormLabel component="legend">User Type</FormLabel>
+                <RadioGroup
+                  name="uType"
+                  value={formValues.uType}
+                  onChange={(e) =>
+                    setFormValues({
+                      ...formValues,
+                      uType: e.target.value as UserTypes,
+                    })
+                  }
+                >
+                  {Object.values(UserTypes).map((type) => (
+                    <FormControlLabel
+                      key={type}
+                      value={type}
+                      control={<Radio />}
+                      label={type.charAt(0).toUpperCase() + type.slice(1)}
+                    />
+                  ))}
+                </RadioGroup>
+              </FormControl>
+
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+              >
+                Submit
+              </Button>
+            </Stack>
+          </form>
+        </Box>
+      </Drawer>
     </>
   );
 }
