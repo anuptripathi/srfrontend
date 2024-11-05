@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { API_URL } from "../constants/api";
+import { API_URL_AUTH, API_URL_BACKEND, AUTH_URLS } from "../constants/api";
 import { getErrorMessage } from "./errors";
 
 export const getHeaders = () => ({
@@ -9,13 +9,17 @@ export const getHeaders = () => ({
 export const post = async (path: string, data: FormData | object) => {
   try {
     const body = data instanceof FormData ? Object.fromEntries(data) : data;
-    const res = await fetch(`${API_URL}/${path}`, {
+    const url = parseUrl(path);
+    const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json", ...getHeaders() },
       body: JSON.stringify(body),
     });
     const parsedRes = await res.json();
     if (!res.ok) {
+      console.error("Failed to fetch url:", url, res.status, res.statusText);
+      //const text = await res.text();
+      // console.log("Response text:", text);
       return { error: getErrorMessage(parsedRes) };
     }
     return { error: "", data: parsedRes };
@@ -29,10 +33,35 @@ export const get = async <T>(
   tags?: string[],
   params?: URLSearchParams
 ) => {
-  const url = params ? `${API_URL}/${path}?` + params : `${API_URL}/${path}`;
+  const pUrl = parseUrl(path);
+  const url = params ? `${pUrl}?` + params : `${pUrl}`;
   const res = await fetch(url, {
     headers: { ...getHeaders() },
     next: { tags },
   });
-  return res.json() as T;
+
+  try {
+    if (!res.ok) {
+      console.error("Failed to fetch url:", url, res.status, res.statusText);
+      //const text = await res.text();
+      // console.log("Response text:", text);
+      throw new Error("Failed to fetch users");
+    }
+    const data = await res.json();
+    return data as T;
+  } catch (error) {
+    console.error("Error parsing JSON:", error);
+    throw new Error("Invalid JSON response");
+  }
+};
+
+export const parseUrl = (uri: string) => {
+  let url = `${API_URL_BACKEND}/${uri}`;
+
+  // Check if `uri` contains any of the keywords
+  if (AUTH_URLS.some((keyword) => uri.includes(keyword))) {
+    url = `${API_URL_AUTH}/${uri}`;
+  }
+
+  return url;
 };

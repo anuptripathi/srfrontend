@@ -1,12 +1,11 @@
 "use server";
 
-import { API_URL } from "@/app/constants/api";
 import { getErrorMessage } from "@/app/util/errors";
 import { redirect } from "next/navigation";
 
 export default async function createUser(_prevState: any, formData: FormData) {
   try {
-    const res = await fetch(`${API_URL}/users`, {
+    const res = await fetch(`users`, {
       method: "POST",
       body: formData,
     });
