@@ -30,9 +30,6 @@ export default function Login() {
         <Button type="submit" variant="contained">
           Login
         </Button>
-        <Link component={NextLink} href="/auth/signup" className="self-center">
-          Signup
-        </Link>
       </Stack>
     </form>
   );
