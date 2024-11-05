@@ -38,15 +38,15 @@ export default function StyledTable({
             <>
               {[...Array(10)].map((_, index) => (
                 <TableRow key={index}>
-                  <TableCell>
-                    <Skeleton variant="text" />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton variant="text" />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton variant="text" />
-                  </TableCell>
+                  {columns.map((column, index) => (
+                    <>
+                      {index > 0 && ( //skip one column, as actions coloum at end is there
+                        <TableCell>
+                          <Skeleton variant="text" />
+                        </TableCell>
+                      )}
+                    </>
+                  ))}
                   <TableCell>
                     <Skeleton variant="circular" width={40} height={40} />
                   </TableCell>
