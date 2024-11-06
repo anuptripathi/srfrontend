@@ -10,7 +10,7 @@ import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import StyledTable from "../common/components/StyledTable";
 import Breadcrumb from "../common/components/BreadCrumb";
-import { User } from "./interfaces/user.interface";
+import { User } from "../common/interfaces/user-types-enum";
 import PaginationComponent from "../common/components/Pagination";
 import CloseIcon from "@mui/icons-material/Close";
 import Alert from "@mui/material/Alert";
@@ -32,6 +32,7 @@ import getUsers from "./actions/get-users";
 import createUser from "./actions/create-user";
 import { useFormState } from "react-dom";
 import { UserTypes } from "../common/interfaces/user-types-enum";
+import AddUser from "./components/AddUser";
 
 export default function UserTablePage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -59,12 +60,16 @@ export default function UserTablePage() {
     roleId: "defaultRoleId123",
   });
 
-  const handleDrawerOpen = () => {
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
+  const handleDrawerOpen = (user?: User) => {
+    setSelectedUser(user || null); // Set the user to be edited or null for adding
     setIsDrawerOpen(true);
   };
 
   const handleDrawerClose = () => {
     setIsDrawerOpen(false);
+    setSelectedUser(null);
   };
 
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,6 +87,10 @@ export default function UserTablePage() {
     setIsLoading(true);
     fetchData(limit, page);
     // Fetch data for the selected page here
+  };
+
+  const handleUserSaved = () => {
+    fetchData(limit, 1); // Refresh user list after add/edit
   };
 
   const fetchData = async (limit: number, page: number) => {
@@ -150,22 +159,14 @@ export default function UserTablePage() {
 
       <Stack direction="row" justifyContent="flex-end" sx={{ mt: 2, mb: 2 }}>
         <Link
-          sx={{
-            cursor: "pointer",
-            textDecoration: "none",
-          }}
-          onClick={handleDrawerOpen}
+          onClick={() => handleDrawerOpen()}
+          sx={{ cursor: "pointer", textDecoration: "underline" }}
         >
           Add User
         </Link>
       </Stack>
 
-      {!users && (
-        <Alert severity="error">
-          No records to show. Please reload or try again later.
-        </Alert>
-      )}
-      {users && (
+      {(users && (
         <>
           <StyledTable
             isLoading={isLoading}
@@ -193,7 +194,9 @@ export default function UserTablePage() {
                     open={Boolean(anchorEl) && selectedUserId === user._id}
                     onClose={handleMenuClose}
                   >
-                    <MenuItem onClick={handleEdit}>Edit</MenuItem>
+                    <MenuItem onClick={() => handleDrawerOpen(user)}>
+                      Edit
+                    </MenuItem>
                     <MenuItem onClick={handleDelete}>Delete</MenuItem>
                   </Menu>
                 </TableCell>
@@ -222,94 +225,19 @@ export default function UserTablePage() {
             )}
           </Stack>
         </>
+      )) || (
+        <Alert severity="error">
+          No records to show. Please reload or try again later.
+        </Alert>
       )}
 
       {/* Drawer for adding a new user */}
-      <Drawer
-        anchor="right"
-        open={isDrawerOpen}
-        onClose={() => {}}
-        sx={{
-          zIndex: (theme) => theme.zIndex.modal + 1, // Ensures the drawer is above all other elements
-        }}
-      >
-        <Box
-          sx={{ width: 300, p: 3, position: "relative" }}
-          role="presentation"
-        >
-          <IconButton
-            sx={{ position: "absolute", top: 8, right: 8 }}
-            onClick={handleDrawerClose}
-          >
-            <CloseIcon />
-          </IconButton>
-
-          <Typography variant="h6" gutterBottom>
-            Add New User
-          </Typography>
-          <form action={handleFormSubmit} className="w-full max-w-xs">
-            <Stack spacing={2}>
-              <TextField
-                label="Name"
-                name="name"
-                fullWidth
-                margin="normal"
-                value={formValues.name}
-                onChange={handleFormChange}
-              />
-              <TextField
-                label="Email"
-                name="email"
-                fullWidth
-                margin="normal"
-                value={formValues.email}
-                onChange={handleFormChange}
-              />
-              <TextField
-                label="Password"
-                name="password"
-                fullWidth
-                type="password"
-                margin="normal"
-                value={formValues.password}
-                onChange={handleFormChange}
-              />
-
-              <FormControl component="fieldset">
-                <FormLabel component="legend">User Type</FormLabel>
-                <RadioGroup
-                  name="uType"
-                  value={formValues.uType}
-                  onChange={(e) =>
-                    setFormValues({
-                      ...formValues,
-                      uType: e.target.value as UserTypes,
-                    })
-                  }
-                >
-                  {Object.values(UserTypes).map((type) => (
-                    <FormControlLabel
-                      key={type}
-                      value={type}
-                      control={<Radio />}
-                      label={type.charAt(0).toUpperCase() + type.slice(1)}
-                    />
-                  ))}
-                </RadioGroup>
-              </FormControl>
-
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                fullWidth
-              >
-                Submit
-              </Button>
-            </Stack>
-          </form>
-        </Box>
-      </Drawer>
+      <AddUser
+        isOpen={isDrawerOpen}
+        onClose={handleDrawerClose}
+        onUserSaved={handleUserSaved}
+        user={selectedUser} // Pass selectedUser to populate form when editing
+      />
     </>
   );
 }
