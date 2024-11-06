@@ -106,7 +106,8 @@ export default function AddUser({
               label="Name"
               name="name"
               fullWidth
-              margin="normal"
+              margin="dense"
+              size="small"
               value={formValues.name}
               onChange={handleFormChange}
             />
@@ -114,7 +115,8 @@ export default function AddUser({
               label="Email"
               name="email"
               fullWidth
-              margin="normal"
+              margin="dense"
+              size="small"
               value={formValues.email}
               onChange={handleFormChange}
             />
@@ -123,7 +125,8 @@ export default function AddUser({
               name="password"
               fullWidth
               type="password"
-              margin="normal"
+              margin="dense"
+              size="small"
               value={formValues.password}
               onChange={handleFormChange}
             />
@@ -144,14 +147,20 @@ export default function AddUser({
                   <FormControlLabel
                     key={type}
                     value={type}
-                    control={<Radio />}
+                    control={<Radio sx={{ p: 0.5 }} />}
                     label={type.charAt(0).toUpperCase() + type.slice(1)}
                   />
                 ))}
               </RadioGroup>
             </FormControl>
 
-            <Button type="submit" variant="contained" color="primary" fullWidth>
+            <Button
+              type="submit"
+              size="small"
+              variant="contained"
+              color="primary"
+              fullWidth
+            >
               Submit
             </Button>
           </Stack>
