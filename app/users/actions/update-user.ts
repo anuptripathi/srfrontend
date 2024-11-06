@@ -10,7 +10,7 @@ export default async function updateUser(
   formData: object
 ): Promise<FormResponse> {
   try {
-    const response = await post(`users/${_id}`, formData);
+    const response = await post(`users/${_id}`, formData, true);
     if (response?.error) {
       return { error: response?.error };
     } else {

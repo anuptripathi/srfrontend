@@ -6,21 +6,32 @@ export const getHeaders = () => ({
   Cookie: cookies().toString(),
 });
 
-export const post = async (path: string, data: FormData | object) => {
+export const post = async (
+  path: string,
+  data: FormData | object,
+  isPatch: boolean = false
+) => {
   try {
     const body = data instanceof FormData ? Object.fromEntries(data) : data;
     const url = parseUrl(path);
+    const method = isPatch ? "PATCH" : "POST";
     const res = await fetch(url, {
-      method: "POST",
+      method,
       headers: { "Content-Type": "application/json", ...getHeaders() },
       body: JSON.stringify(body),
     });
     const parsedRes = await res.json();
     if (!res.ok) {
-      console.error("Failed to fetch url:", url, res.status, res.statusText);
-      //const text = await res.text();
-      // console.log("Response text:", text);
-      return { error: getErrorMessage(parsedRes) };
+      console.error(
+        "Failed to fetch url (" + method + "):",
+        url,
+        res.status,
+        res.statusText
+      );
+      const text = await res.text();
+      console.log("Response text:", text);
+      const errMessage = getErrorMessage(parsedRes);
+      return { error: errMessage };
     }
     return { error: "", data: parsedRes };
   } catch (err) {
@@ -42,7 +53,12 @@ export const get = async <T>(
 
   try {
     if (!res.ok) {
-      console.error("Failed to fetch url:", url, res.status, res.statusText);
+      console.error(
+        "Failed to fetch url (GET):",
+        url,
+        res.status,
+        res.statusText
+      );
       //const text = await res.text();
       // console.log("Response text:", text);
       throw new Error("Failed to fetch users");

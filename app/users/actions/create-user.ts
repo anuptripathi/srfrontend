@@ -5,7 +5,7 @@ import { FormResponse } from "@/app/common/interfaces/form-response.interface";
 import { post } from "@/app/common/util/fetch";
 import { revalidateTag } from "next/cache";
 
-export default async function updateUser(formData: any): Promise<FormResponse> {
+export default async function createUser(formData: any): Promise<FormResponse> {
   try {
     const response = await post(`users`, formData);
     if (response?.error) {
