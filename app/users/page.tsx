@@ -12,25 +12,9 @@ import StyledTable from "../common/components/StyledTable";
 import Breadcrumb from "../common/components/BreadCrumb";
 import { User } from "../common/interfaces/user-types-enum";
 import PaginationComponent from "../common/components/Pagination";
-import CloseIcon from "@mui/icons-material/Close";
 import Alert from "@mui/material/Alert";
-import {
-  Box,
-  Button,
-  Drawer,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  Link,
-  Radio,
-  RadioGroup,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Link, Stack, Typography } from "@mui/material";
 import getUsers from "./actions/get-users";
-import createUser from "./actions/create-user";
-import { useFormState } from "react-dom";
 import { UserTypes } from "../common/interfaces/user-types-enum";
 import AddUser from "./components/AddUser";
 
@@ -52,31 +36,17 @@ export default function UserTablePage() {
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  const [formValues, setFormValues] = useState({
-    name: "",
-    email: "",
-    password: "",
-    uType: UserTypes.ENDUSER,
-    roleId: "defaultRoleId123",
-  });
-
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   const handleDrawerOpen = (user?: User) => {
     setSelectedUser(user || null); // Set the user to be edited or null for adding
     setIsDrawerOpen(true);
+    handleMenuClose();
   };
 
   const handleDrawerClose = () => {
     setIsDrawerOpen(false);
     setSelectedUser(null);
-  };
-
-  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormValues({
-      ...formValues,
-      [e.target.name]: e.target.value,
-    });
   };
 
   const handlePageChange = (
@@ -85,15 +55,17 @@ export default function UserTablePage() {
   ) => {
     setCurrentPage(page);
     setIsLoading(true);
-    fetchData(limit, page);
+    fetchData(page);
     // Fetch data for the selected page here
   };
 
   const handleUserSaved = () => {
-    fetchData(limit, 1); // Refresh user list after add/edit
+    setCurrentPage(1);
+    fetchData(1);
   };
 
-  const fetchData = async (limit: number, page: number) => {
+  const fetchData = async (page: number) => {
+    console.log("currentPage", page);
     try {
       const offset = (page - 1) * limit;
       const response = await getUsers(limit, offset);
@@ -112,7 +84,8 @@ export default function UserTablePage() {
   };
 
   useEffect(() => {
-    fetchData(limit, 1);
+    setCurrentPage(1);
+    fetchData(1);
   }, []);
 
   const handleMenuOpen = (
@@ -128,29 +101,10 @@ export default function UserTablePage() {
     setSelectedUserId(null);
   };
 
-  const handleEdit = () => {
-    console.log("Edit user", selectedUserId);
-    handleMenuClose();
-  };
-
   const handleDelete = () => {
     console.log("Delete user", selectedUserId);
     setUsers(users.filter((user) => user._id !== selectedUserId));
     handleMenuClose();
-  };
-
-  const handleFormSubmit = async () => {
-    try {
-      const res = await createUser(formValues); // Assuming addUser is an async function that posts to your backend
-      if (res?.error) {
-        console.log("Failed to add user:", res.error);
-        return;
-      }
-      handleDrawerClose();
-      fetchData(limit, currentPage); // Refresh the user list after adding a new user
-    } catch (error) {
-      console.error("Failed to add user:", error);
-    }
   };
 
   return (

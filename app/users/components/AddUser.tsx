@@ -83,7 +83,8 @@ export default function AddUser({
     <Drawer
       anchor="right"
       open={isOpen}
-      onClose={() => {}}
+      //onClose={() => {}}
+      onClose={onClose}
       sx={{
         zIndex: (theme) => theme.zIndex.modal + 1,
       }}
