@@ -2,11 +2,10 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Box, Container, CssBaseline } from "@mui/material";
-import Header from "./common/components/header";
+import Header from "./common/components/Header";
 import Providers from "./providers";
 import authenticated from "./auth/actions/authenticated";
 import logout from "./auth/logout";
-import { width } from "@mui/system";
 
 const inter = Inter({ subsets: ["latin"] });
 
