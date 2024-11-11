@@ -13,7 +13,16 @@ import Breadcrumb from "../common/components/BreadCrumb";
 import { User } from "../common/interfaces/user-types-enum";
 import PaginationComponent from "../common/components/Pagination";
 import Alert from "@mui/material/Alert";
-import { Link, Stack, Typography } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  Link,
+  Select,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import getUsers from "./actions/get-users";
 import { UserTypes } from "../common/interfaces/user-types-enum";
 import AddUser from "./components/AddUser";
@@ -38,6 +47,10 @@ export default function UserTablePage() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
+  const [searchName, setSearchName] = useState<string>("");
+  const [searchEmail, setSearchEmail] = useState<string>("");
+  const [searchUType, setSearchUType] = useState<string>("");
 
   const handleDrawerOpen = (user?: User) => {
     setSelectedUser(user || null); // Set the user to be edited or null for adding
@@ -69,7 +82,13 @@ export default function UserTablePage() {
     console.log("currentPage", page);
     try {
       const offset = (page - 1) * limit;
-      const response = await getUsers(limit, offset);
+      const response = await getUsers(
+        limit,
+        offset,
+        searchName,
+        searchEmail,
+        searchUType
+      );
       setIsCursorBased(response.cursorBased);
       setUsers(response.data);
       if (response.totalRecords && response.totalRecords > 0) {
@@ -108,9 +127,61 @@ export default function UserTablePage() {
     handleMenuClose();
   };
 
+  const handleSearch = () => {
+    setCurrentPage(1);
+    fetchData(1); // Fetch data with the search parameters
+  };
+  const handleReset = () => {
+    setSearchName("");
+    setSearchEmail("");
+    setSearchUType("");
+    setCurrentPage(1);
+    fetchData(1); // Fetch data with cleared search parameters
+  };
+
   return (
     <>
       <Breadcrumb items={[{ name: "Home", link: "/" }, { name: "Users" }]} />
+
+      {/* Search Form */}
+      <Stack direction="row" spacing={2} sx={{ mt: 2, mb: 2 }}>
+        <TextField
+          label="Name"
+          value={searchName}
+          onChange={(e) => setSearchName(e.target.value)}
+          size="small"
+        />
+        <TextField
+          label="Email"
+          value={searchEmail}
+          onChange={(e) => setSearchEmail(e.target.value)}
+          size="small"
+        />
+        <FormControl size="small" sx={{ minWidth: 150 }}>
+          <InputLabel>User Type</InputLabel>
+          <Select
+            label="User Type"
+            value={searchUType}
+            onChange={(e) => setSearchUType(e.target.value)}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            {Object.values(UserTypes).map((type) => (
+              <MenuItem key={type} value={type}>
+                {type.charAt(0).toUpperCase() + type.slice(1)}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <Button variant="contained" onClick={handleSearch}>
+          Search
+        </Button>
+        <Button variant="outlined" onClick={handleReset}>
+          Reset
+        </Button>
+      </Stack>
 
       <Stack direction="row" justifyContent="flex-end" sx={{ mt: 2, mb: 2 }}>
         <Link
