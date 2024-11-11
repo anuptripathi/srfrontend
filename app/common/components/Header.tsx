@@ -144,9 +144,7 @@ export default function Header({ logout }: HeaderProps) {
                         },
                   ]}
                 >
-                  {React.createElement(iconMapping[page.icon] || MailIcon, {
-                    fontSize: "inherit",
-                  })}
+                  {React.createElement(iconMapping[page.icon] || MailIcon)}
                 </ListItemIcon>
                 <ListItemText
                   primary={page.title}
