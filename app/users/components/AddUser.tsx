@@ -135,12 +135,22 @@ export default function AddUser({
           </Grid>
 
           {isAccountOwnerAdmin(formValues) && formValues.refreshToken && (
-            <Grid item xs={12}>
+            <Grid item xs={12} md={6}>
               <Box>
-                <Stack direction="row" spacing={2} alignItems="center">
+                <Stack
+                  direction="row"
+                  sx={{
+                    backgroundColor: "#6a857c",
+                    marginTop: "10px",
+                    borderRadius: "5px",
+                    padding: "5px",
+                  }}
+                  spacing={2}
+                  alignItems="center"
+                >
                   <Typography>
                     <Typography fontSize={12}>RefreshToken</Typography>
-                    <Typography fontSize={12} color="gray">
+                    <Typography fontSize={12} color="black">
                       {getMaskedToken(formValues.refreshToken)}
                     </Typography>
                   </Typography>
