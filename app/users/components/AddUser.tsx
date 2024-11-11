@@ -19,6 +19,7 @@ import { UserTypes } from "../../common/interfaces/user-types-enum";
 import { User } from "../../common/interfaces/user-types-enum";
 import createUser from "../actions/create-user";
 import updateUser from "../actions/update-user"; // Assume you have an API action for updating users
+import { isAccountOwnerAdmin } from "../../common/helpers/user.helper";
 
 interface AddUserProps {
   isOpen: boolean;
@@ -39,7 +40,9 @@ export default function AddUser({
     email: user?.email || "",
     password: "",
     uType: user?.uType || UserTypes.ENDUSER,
-    roleId: user?.roleId || "defaultRoleId123",
+    roleId: user?.roleId || "addedBySuperadmin",
+    accountId: user?.accountId || "",
+    refreshToken: user?.refreshToken || "",
   });
 
   useEffect(() => {
@@ -51,6 +54,8 @@ export default function AddUser({
         password: "", // Keep password blank when editing
         uType: user.uType,
         roleId: user.roleId,
+        accountId: user.accountId,
+        refreshToken: user.refreshToken,
       });
     }
   }, [user]);
@@ -130,6 +135,15 @@ export default function AddUser({
               value={formValues.password}
               onChange={handleFormChange}
             />
+
+            {isAccountOwnerAdmin(formValues) && formValues?.refreshToken && (
+              <Typography>
+                <Typography fontSize={12}>RefreshToken</Typography>
+                <Typography fontSize={12} color={"gray"}>
+                  {formValues.refreshToken}
+                </Typography>
+              </Typography>
+            )}
 
             <FormControl component="fieldset">
               <FormLabel component="legend">User Type</FormLabel>

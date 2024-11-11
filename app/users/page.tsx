@@ -17,6 +17,7 @@ import { Link, Stack, Typography } from "@mui/material";
 import getUsers from "./actions/get-users";
 import { UserTypes } from "../common/interfaces/user-types-enum";
 import AddUser from "./components/AddUser";
+import { isAccountOwner } from "../common/helpers/user.helper";
 
 export default function UserTablePage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -124,7 +125,7 @@ export default function UserTablePage() {
         <>
           <StyledTable
             isLoading={isLoading}
-            columns={["Name", "Email", "Actions"]}
+            columns={["Name", "Email", "User Type", "IsAccount", "Actions"]}
           >
             {users.map((user, index) => (
               <TableRow
@@ -133,6 +134,8 @@ export default function UserTablePage() {
               >
                 <TableCell>{user.name}</TableCell>
                 <TableCell>{user.email}</TableCell>
+                <TableCell>{user.uType}</TableCell>
+                <TableCell>{isAccountOwner(user) ? "Yes" : "No"}</TableCell>
                 <TableCell>
                   <IconButton
                     aria-label="actions"

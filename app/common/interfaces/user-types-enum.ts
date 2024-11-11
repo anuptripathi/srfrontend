@@ -12,4 +12,6 @@ export interface User {
   password: string;
   uType: string;
   roleId: string;
+  accountId: string;
+  refreshToken: string;
 }
