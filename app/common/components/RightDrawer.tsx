@@ -2,12 +2,13 @@
 import React, { ReactNode } from "react";
 import { Drawer, Box, IconButton, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { useMediaQuery, useTheme } from "@mui/material";
 
 interface RightDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  width?: number; // optional width prop
+  minWidth?: number; // optional width prop
   children: ReactNode;
 }
 
@@ -15,9 +16,13 @@ const RightDrawer: React.FC<RightDrawerProps> = ({
   isOpen,
   onClose,
   title,
-  width = 300, // default width if not provided
+  minWidth = 280, // default width if not provided
   children,
 }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
+  const drawerWidth = isMobile || isTablet ? minWidth : minWidth * 2;
   return (
     <Drawer
       anchor="right"
@@ -26,12 +31,12 @@ const RightDrawer: React.FC<RightDrawerProps> = ({
       sx={{
         zIndex: (theme) => theme.zIndex.modal + 1,
         "& .MuiDrawer-paper": {
-          width: width,
+          width: drawerWidth,
         },
       }}
     >
       <Box
-        sx={{ width: width, p: 3, position: "relative" }}
+        sx={{ width: drawerWidth, p: 3, position: "relative" }}
         role="presentation"
       >
         <IconButton
