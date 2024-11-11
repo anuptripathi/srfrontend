@@ -4,20 +4,19 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import { AuthContext } from "../auth/auth-context";
+import { AuthContext } from "../../auth/auth-context";
 import { MouseEvent, useContext, useState } from "react";
 import Link from "next/link";
-import { routes, unauthenticatedRoutes } from "../common/constants/routes";
+import { routes, unauthenticatedRoutes } from "../constants/routes";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { AppBar, Drawer, DrawerHeader } from "./drawer";
+import { AppBar, Drawer, DrawerHeader } from "./LeftDrawer";
 import {
   Button,
   Divider,

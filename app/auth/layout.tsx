@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { Logo } from "../menus/logo";
+import { Logo } from "../common/components/logo";
 
 export default function AuthLayout({
   children,
