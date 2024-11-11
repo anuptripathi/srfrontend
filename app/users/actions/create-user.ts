@@ -1,8 +1,8 @@
 "use server";
 
-import { getErrorMessage } from "@/app/common/util/errors";
+import { getErrorMessage } from "@/app/common/utils/errors";
 import { FormResponse } from "@/app/common/interfaces/form-response.interface";
-import { post } from "@/app/common/util/fetch";
+import { post } from "@/app/common/utils/fetch";
 import { revalidateTag } from "next/cache";
 
 export default async function createUser(formData: any): Promise<FormResponse> {

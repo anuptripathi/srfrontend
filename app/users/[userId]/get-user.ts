@@ -1,4 +1,4 @@
-import { get } from "@/app/common/util/fetch";
+import { get } from "@/app/common/utils/fetch";
 import { User } from "../interfaces/user.interface";
 
 export default async function getUser(userId: string) {

@@ -2,12 +2,12 @@ export const unauthenticatedRoutes = [
   {
     title: "Login",
     path: "/auth/login",
-    icon: "MailIcon",
+    icon: "GroupIcon",
   },
   {
     title: "Signup",
     path: "/auth/signup",
-    icon: "MailIcon",
+    icon: "GroupIcon",
   },
 ];
 
@@ -15,21 +15,21 @@ export const routes = [
   {
     title: "Home",
     path: "/",
-    icon: "MailIcon",
+    icon: "HomeIcon",
   },
   {
     title: "Products",
     path: "/products",
-    icon: "MailIcon",
+    icon: "InventoryIcon",
   },
   {
     title: "Users",
     path: "/users",
-    icon: "MailIcon",
+    icon: "GroupIcon",
   },
   {
     title: "Permissions",
     path: "/permissions",
-    icon: "MailIcon",
+    icon: "SettingsAccessibilityIcon",
   },
 ];

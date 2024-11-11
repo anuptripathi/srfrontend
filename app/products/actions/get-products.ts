@@ -1,6 +1,6 @@
 "use server";
 
-import { get } from "@/app/common/util/fetch";
+import { get } from "@/app/common/utils/fetch";
 import { manyDocsResponse } from "@/app/common/interfaces/doc-response.interface";
 
 export default async function getProducts(

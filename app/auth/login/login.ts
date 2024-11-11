@@ -4,7 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { API_URL_AUTH } from "@/app/common/constants/api";
-import { getErrorMessage } from "@/app/common/util/errors";
+import { getErrorMessage } from "@/app/common/utils/errors";
 import { FormResponse } from "@/app/common/interfaces/form-response.interface";
 import { AUTHENTICATION_COOKIE } from "../auth-cookie";
 

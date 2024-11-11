@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidateTag } from "next/cache";
-import { getHeaders, post } from "../../common/util/fetch";
+import { getHeaders, post } from "../../common/utils/fetch";
 
 export default async function createProduct(formData: FormData) {
   const response = await post(`products`, formData);

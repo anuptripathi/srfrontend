@@ -33,6 +33,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NextLink from "next/link";
 import { Logo } from "./logo";
+import iconMapping from "../utils/iconMapping";
 
 interface HeaderProps {
   logout: () => Promise<void>;
@@ -143,7 +144,9 @@ export default function Header({ logout }: HeaderProps) {
                         },
                   ]}
                 >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  {React.createElement(iconMapping[page.icon] || MailIcon, {
+                    fontSize: "inherit",
+                  })}
                 </ListItemIcon>
                 <ListItemText
                   primary={page.title}
