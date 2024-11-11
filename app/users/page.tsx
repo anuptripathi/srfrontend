@@ -132,11 +132,13 @@ export default function UserTablePage() {
                 key={user._id}
                 sx={{ backgroundColor: index % 2 === 0 ? "#f5f5f5" : "white" }}
               >
-                <TableCell>{user.name}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>{user.uType}</TableCell>
-                <TableCell>{isAccountOwner(user) ? "Yes" : "No"}</TableCell>
-                <TableCell>
+                <TableCell key={"col1" + user._id}>{user.name}</TableCell>
+                <TableCell key={"col2" + user._id}>{user.email}</TableCell>
+                <TableCell key={"col3" + user._id}>{user.uType}</TableCell>
+                <TableCell key={"col4" + user._id}>
+                  {isAccountOwner(user) ? "Yes" : "No"}
+                </TableCell>
+                <TableCell key={"col5" + user._id}>
                   <IconButton
                     aria-label="actions"
                     aria-controls={`menu-${user._id}`}

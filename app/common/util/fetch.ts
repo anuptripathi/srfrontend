@@ -23,10 +23,11 @@ export const post = async (
     const parsedRes = await res.json();
     if (!res.ok) {
       console.error(
-        "Failed to fetch url (" + method + "):",
+        "Failed to post url (" + method + "):",
         url,
         res.status,
-        res.statusText
+        res.statusText,
+        body
       );
       const text = await res.text();
       console.log("Response text:", text);
@@ -54,7 +55,7 @@ export const get = async <T>(
   try {
     if (!res.ok) {
       console.error(
-        "Failed to fetch url (GET):",
+        "Failed to get url (GET):",
         url,
         res.status,
         res.statusText

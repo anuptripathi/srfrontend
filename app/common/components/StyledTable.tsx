@@ -1,4 +1,3 @@
-// components/StyledTable.tsx
 import * as React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -27,29 +26,26 @@ export default function StyledTable({
     <TableContainer component={Paper} sx={{ width: "100%", ...containerSx }}>
       <Table>
         <TableHead>
-          <TableRow>
+          <TableRow key="styledtableColumns">
             {columns.map((column, index) => (
-              <TableCell key={index}>{column}</TableCell>
+              <TableCell key={`colName-${index}`}>{column}</TableCell>
             ))}
           </TableRow>
         </TableHead>
         <TableBody>
           {isLoading ? (
             <>
-              {[...Array(10)].map((_, index) => (
-                <TableRow key={index}>
-                  {columns.map((column, index) => (
-                    <>
-                      {index > 0 && ( //skip one column, as actions coloum at end is there
-                        <TableCell>
-                          <Skeleton variant="text" />
-                        </TableCell>
+              {[...Array(10)].map((_, rowIndex) => (
+                <TableRow key={`skelton-${rowIndex}`}>
+                  {columns.map((column, colIndex) => (
+                    <TableCell key={`skeltonCell-${rowIndex}-${colIndex}`}>
+                      {colIndex < columns.length - 1 ? (
+                        <Skeleton variant="text" />
+                      ) : (
+                        <Skeleton variant="circular" width={40} height={40} />
                       )}
-                    </>
+                    </TableCell>
                   ))}
-                  <TableCell>
-                    <Skeleton variant="circular" width={40} height={40} />
-                  </TableCell>
                 </TableRow>
               ))}
             </>

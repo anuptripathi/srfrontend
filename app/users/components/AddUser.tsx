@@ -34,7 +34,7 @@ export default function AddUser({
   onUserSaved,
   user,
 }: AddUserProps) {
-  const [formValues, setFormValues] = useState({
+  const [formValues, setFormValues] = useState<User>({
     _id: user?._id || "",
     name: user?.name || "",
     email: user?.email || "",
@@ -69,13 +69,20 @@ export default function AddUser({
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const { password, ...updatedFormValues } = formValues;
+    let formVal;
+    if (password && password.length > 0) {
+      formVal = { ...updatedFormValues, password };
+    } else {
+      formVal = updatedFormValues;
+    }
     try {
       if (user) {
         // If editing, call update user API
-        await updateUser(user._id, formValues);
+        await updateUser(user._id, formVal);
       } else {
         // If adding, call create user API
-        await createUser(formValues);
+        await createUser(formVal);
       }
       onUserSaved(); // Callback to refresh the user list
       onClose(); // Close the drawer after saving
