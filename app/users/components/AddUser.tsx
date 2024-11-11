@@ -20,6 +20,7 @@ import { User } from "../../common/interfaces/user-types-enum";
 import createUser from "../actions/create-user";
 import updateUser from "../actions/update-user"; // Assume you have an API action for updating users
 import { isAccountOwnerAdmin } from "../../common/helpers/user.helper";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 interface AddUserProps {
   isOpen: boolean;
@@ -91,6 +92,13 @@ export default function AddUser({
     }
   };
 
+  const getMaskedToken = (token: string) => {
+    if (token.length <= 15) {
+      return token; // If the token length is 10 or less, no masking needed
+    }
+    return token.slice(0, 15) + "*******"; // Mask the token after the first 10 characters
+  };
+
   return (
     <Drawer
       anchor="right"
@@ -144,12 +152,24 @@ export default function AddUser({
             />
 
             {isAccountOwnerAdmin(formValues) && formValues?.refreshToken && (
-              <Typography>
-                <Typography fontSize={12}>RefreshToken</Typography>
-                <Typography fontSize={12} color={"gray"}>
-                  {formValues.refreshToken}
-                </Typography>
-              </Typography>
+              <Box>
+                <Stack direction="row" spacing={2} alignItems="center">
+                  <Typography>
+                    <Typography fontSize={12}>RefreshToken</Typography>
+                    <Typography fontSize={12} color={"gray"}>
+                      {/* Show first 10 chars and mask the rest */}
+                      {getMaskedToken(formValues.refreshToken)}
+                    </Typography>
+                  </Typography>
+
+                  {/* Copy Button */}
+                  <CopyToClipboard text={formValues.refreshToken}>
+                    <Button size="small" sx={{ mt: 1 }}>
+                      Copy Token
+                    </Button>
+                  </CopyToClipboard>
+                </Stack>
+              </Box>
             )}
 
             <FormControl component="fieldset">
