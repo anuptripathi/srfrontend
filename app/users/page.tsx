@@ -125,12 +125,12 @@ export default function UserTablePage() {
     setSelectedUserId(null);
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = () => {
     //setUsers(users.filter((user) => user._id !== selectedUserId));
-    deleteUser(id);
+    deleteUser(selectedUserId as string);
     handleCloseConfirmDialog();
     handleMenuClose();
-    // handleSearch();
+    handleSearch(); // to refresh the page
   };
 
   const handleSearch = () => {
@@ -245,17 +245,6 @@ export default function UserTablePage() {
                       Delete
                     </MenuItem>
                   </Menu>
-
-                  {/* Confirmation Dialog */}
-                  <ConfirmDialog
-                    open={openConfirmDialog}
-                    title="Confirm Deletion"
-                    content="Are you sure you want to delete this user? This action cannot be undone."
-                    onClose={handleCloseConfirmDialog}
-                    onConfirm={() => {
-                      handleDelete(user._id);
-                    }}
-                  />
                 </TableCell>
               </TableRow>
             ))}
@@ -294,6 +283,15 @@ export default function UserTablePage() {
         onClose={handleDrawerClose}
         onUserSaved={handleUserSaved}
         user={selectedUser} // Pass selectedUser to populate form when editing
+      />
+
+      {/* Confirmation Dialog */}
+      <ConfirmDialog
+        open={openConfirmDialog}
+        title="Confirm Deletion"
+        content="Are you sure you want to delete this user? This action cannot be undone."
+        onClose={handleCloseConfirmDialog}
+        onConfirm={handleDelete}
       />
     </>
   );
