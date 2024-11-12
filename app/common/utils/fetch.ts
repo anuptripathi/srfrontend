@@ -9,29 +9,36 @@ export const getHeaders = () => ({
 export const post = async (
   path: string,
   data: FormData | object,
-  isPatch: boolean = false
+  method = "POST"
 ) => {
   try {
     const body = data instanceof FormData ? Object.fromEntries(data) : data;
     const url = parseUrl(path);
-    const method = isPatch ? "PATCH" : "POST";
     const res = await fetch(url, {
       method,
       headers: { "Content-Type": "application/json", ...getHeaders() },
       body: JSON.stringify(body),
     });
+
     const parsedRes = await res.json();
     if (!res.ok) {
+      const errMessage = getErrorMessage(parsedRes);
+
       console.error(
         "Failed to post url (" + method + "):",
+        ", ",
         url,
+        ", ",
         res.status,
+        ", ",
         res.statusText,
+        ", ",
+        errMessage,
+        ", ",
+        "requestBody: ",
         body
       );
-      const text = await res.text();
-      console.log("Response text:", text);
-      const errMessage = getErrorMessage(parsedRes);
+
       return { error: errMessage };
     }
     return { error: "", data: parsedRes };
@@ -53,19 +60,23 @@ export const get = async <T>(
   });
 
   try {
+    const parsedRes = await res.json();
     if (!res.ok) {
+      const errMessage = getErrorMessage(parsedRes);
+
       console.error(
-        "Failed to get url (GET):",
+        "Failed to post url:",
+        ", ",
         url,
+        ", ",
         res.status,
-        res.statusText
+        ", ",
+        res.statusText,
+        ", ",
+        errMessage
       );
-      //const text = await res.text();
-      // console.log("Response text:", text);
-      throw new Error("Failed to fetch users");
     }
-    const data = await res.json();
-    return data as T;
+    return parsedRes as T;
   } catch (error) {
     console.error("Error parsing JSON:", error);
     throw new Error("Invalid JSON response");

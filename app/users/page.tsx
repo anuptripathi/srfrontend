@@ -13,6 +13,7 @@ import Breadcrumb from "../common/components/BreadCrumb";
 import { User } from "../common/interfaces/user-types-enum";
 import PaginationComponent from "../common/components/Pagination";
 import Alert from "@mui/material/Alert";
+import ConfirmDialog from "../common/components/ConfirmDialog";
 import {
   Button,
   FormControl,
@@ -27,6 +28,7 @@ import getUsers from "./actions/get-users";
 import { UserTypes } from "../common/interfaces/user-types-enum";
 import AddUser from "./components/AddUser";
 import { isAccountOwner } from "../common/helpers/user.helper";
+import deleteUser from "./actions/deleteUser";
 
 export default function UserTablePage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -51,6 +53,8 @@ export default function UserTablePage() {
   const [searchName, setSearchName] = useState<string>("");
   const [searchEmail, setSearchEmail] = useState<string>("");
   const [searchUType, setSearchUType] = useState<string>("");
+
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
 
   const handleDrawerOpen = (user?: User) => {
     setSelectedUser(user || null); // Set the user to be edited or null for adding
@@ -121,10 +125,12 @@ export default function UserTablePage() {
     setSelectedUserId(null);
   };
 
-  const handleDelete = () => {
-    console.log("Delete user", selectedUserId);
-    setUsers(users.filter((user) => user._id !== selectedUserId));
+  const handleDelete = (id: string) => {
+    //setUsers(users.filter((user) => user._id !== selectedUserId));
+    deleteUser(id);
+    handleCloseConfirmDialog();
     handleMenuClose();
+    // handleSearch();
   };
 
   const handleSearch = () => {
@@ -137,6 +143,14 @@ export default function UserTablePage() {
     setSearchUType("");
     setCurrentPage(1);
     fetchData(1); // Fetch data with cleared search parameters
+  };
+
+  const handleOpenConfirmDialog = () => {
+    setOpenConfirmDialog(true);
+  };
+
+  const handleCloseConfirmDialog = () => {
+    setOpenConfirmDialog(false);
   };
 
   return (
@@ -227,8 +241,21 @@ export default function UserTablePage() {
                     <MenuItem onClick={() => handleDrawerOpen(user)}>
                       Edit
                     </MenuItem>
-                    <MenuItem onClick={handleDelete}>Delete</MenuItem>
+                    <MenuItem onClick={handleOpenConfirmDialog}>
+                      Delete
+                    </MenuItem>
                   </Menu>
+
+                  {/* Confirmation Dialog */}
+                  <ConfirmDialog
+                    open={openConfirmDialog}
+                    title="Confirm Deletion"
+                    content="Are you sure you want to delete this user? This action cannot be undone."
+                    onClose={handleCloseConfirmDialog}
+                    onConfirm={() => {
+                      handleDelete(user._id);
+                    }}
+                  />
                 </TableCell>
               </TableRow>
             ))}
