@@ -4,7 +4,7 @@ const lightTheme = createTheme({
   palette: {
     mode: "light",
     primary: {
-      main: "#133E87",
+      main: "#5f18f5",
     },
     secondary: {
       main: "#dc004e",
@@ -46,7 +46,8 @@ const lightTheme = createTheme({
     MuiAppBar: {
       styleOverrides: {
         colorPrimary: {
-          backgroundColor: "#091057",
+          backgroundColor: "#eeeeee",
+          color: "#000000",
         },
       },
     },
