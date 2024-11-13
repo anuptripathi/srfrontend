@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Grid } from "@mui/material";
 import {
   Box,
-  Button,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -20,6 +19,7 @@ import updateUser from "../actions/update-user";
 import { isAccountOwnerAdmin } from "../../common/helpers/user.helper";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import RightDrawer from "../../common/components/RightDrawer"; // Import RightDrawer
+import { SolidButton } from "@/app/common/components/Buttons";
 
 interface AddUserProps {
   isOpen: boolean;
@@ -88,7 +88,7 @@ export default function AddUser({
   };
 
   const getMaskedToken = (token: string) => {
-    return token.length <= 15 ? token : token.slice(0, 15) + "*******";
+    return token.length <= 10 ? token : token.slice(0, 10) + "*******";
   };
 
   return (
@@ -155,9 +155,7 @@ export default function AddUser({
                     </Typography>
                   </Typography>
                   <CopyToClipboard text={formValues.refreshToken}>
-                    <Button size="small" sx={{ mt: 1 }}>
-                      Copy Token
-                    </Button>
+                    <SolidButton color="secondary">Copy Token</SolidButton>
                   </CopyToClipboard>
                 </Stack>
               </Box>
@@ -190,16 +188,9 @@ export default function AddUser({
           </Grid>
 
           <Grid item xs={12} sx={{ display: "flex", justifyContent: "right" }}>
-            <Button
-              type="submit"
-              size="small"
-              variant="contained"
-              color="primary"
-              fullWidth
-              sx={{ maxWidth: 200 }}
-            >
+            <SolidButton type="submit" sx={{ maxWidth: 200 }}>
               Submit
-            </Button>
+            </SolidButton>
           </Grid>
         </Grid>
       </form>

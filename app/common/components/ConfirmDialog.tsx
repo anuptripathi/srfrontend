@@ -4,8 +4,8 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Button,
 } from "@mui/material";
+import { LightButton } from "./Buttons";
 
 interface ConfirmDialogProps {
   open: boolean;
@@ -35,12 +35,12 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
       <DialogTitle id="confirm-dialog-title">{title}</DialogTitle>
       <DialogContent>{content}</DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary" variant="outlined">
+        <LightButton onClick={onClose} color="primary">
           {cancelText}
-        </Button>
-        <Button onClick={onConfirm} color="error" autoFocus variant="outlined">
+        </LightButton>
+        <LightButton onClick={onConfirm} color="error" autoFocus>
           {confirmText}
-        </Button>
+        </LightButton>
       </DialogActions>
     </Dialog>
   );

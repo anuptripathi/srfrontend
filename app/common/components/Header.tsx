@@ -34,6 +34,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NextLink from "next/link";
 import { Logo } from "./logo";
 import iconMapping from "../utils/iconMapping";
+import { LightButton } from "./Buttons";
 
 interface HeaderProps {
   logout: () => Promise<void>;
@@ -163,14 +164,15 @@ export default function Header({ logout }: HeaderProps) {
           ))}
         </List>
         <Divider />
-        <Button
+        <LightButton
+          variant="text"
           key="Logout"
           onClick={async () => {
             await logout();
           }}
         >
           <Typography textAlign="center">Logout</Typography>
-        </Button>
+        </LightButton>
       </Drawer>
     </>
   );

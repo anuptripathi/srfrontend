@@ -29,6 +29,7 @@ import { UserTypes } from "../common/interfaces/user-types-enum";
 import AddUser from "./components/AddUser";
 import { isAccountOwner } from "../common/helpers/user.helper";
 import deleteUser from "./actions/deleteUser";
+import { LightButton, SolidButton } from "../common/components/Buttons";
 
 export default function UserTablePage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -189,12 +190,8 @@ export default function UserTablePage() {
           </Select>
         </FormControl>
 
-        <Button variant="contained" onClick={handleSearch}>
-          Search
-        </Button>
-        <Button variant="outlined" onClick={handleReset}>
-          Reset
-        </Button>
+        <SolidButton onClick={handleSearch}>Search</SolidButton>
+        <LightButton onClick={handleReset}>Reset</LightButton>
       </Stack>
 
       <Stack direction="row" justifyContent="flex-end" sx={{ mt: 2, mb: 2 }}>

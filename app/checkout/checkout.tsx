@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@mui/material";
 import checkout from "./actions/checkout";
 import getStripe from "./stripe";
+import { SolidButton } from "../common/components/Buttons";
 
 interface CheckoutProps {
   productId: string;
@@ -16,12 +16,8 @@ export default function Checkout({ productId }: CheckoutProps) {
   };
 
   return (
-    <Button
-      variant="contained"
-      className="max-w-[25%]"
-      onClick={handleCheckout}
-    >
+    <SolidButton className="max-w-[25%]" onClick={handleCheckout}>
       Buy Now
-    </Button>
+    </SolidButton>
   );
 }

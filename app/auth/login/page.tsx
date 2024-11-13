@@ -4,6 +4,7 @@ import { Button, Link, Stack, TextField } from "@mui/material";
 import NextLink from "next/link";
 import { useFormState } from "react-dom";
 import login from "./login";
+import { SolidButton } from "@/app/common/components/Buttons";
 
 export default function Login() {
   const [state, formAction] = useFormState(login, { error: "" });
@@ -27,9 +28,7 @@ export default function Login() {
           variant="outlined"
           type="password"
         />
-        <Button type="submit" variant="contained">
-          Login
-        </Button>
+        <SolidButton type="submit">Login</SolidButton>
       </Stack>
     </form>
   );

@@ -12,6 +12,7 @@ import { CSSProperties, useState } from "react";
 import { FormResponse } from "../../common/interfaces/form-response.interface";
 import createProduct from "../actions/create-product";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { SolidButton } from "@/app/common/components/Buttons";
 
 const styles = {
   position: "absolute",
@@ -95,9 +96,7 @@ export default function CreateProductModal({
             />
 
             <Typography>{fileName}</Typography>
-            <Button type="submit" variant="contained">
-              Submit
-            </Button>
+            <SolidButton type="submit">Submit</SolidButton>
           </Stack>
         </form>
       </Box>
