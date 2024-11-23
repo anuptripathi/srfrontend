@@ -16,6 +16,7 @@ import RightDrawer from "../../common/components/RightDrawer"; // Import RightDr
 import { SolidButton } from "@/app/common/components/Buttons";
 import { Permission } from "../interface";
 import { Actions } from "@/app/common/constants/actions";
+import { UserTypes } from "@/app/common/constants/userTypes";
 
 interface AddPermissionProps {
   isOpen: boolean;
@@ -36,11 +37,18 @@ export default function AddPermission({
     Actions.EDIT,
     Actions.DELETE,
   ];
+  const userTypes: string[] = [
+    UserTypes.SUPERADMIN,
+    UserTypes.PARTNER,
+    UserTypes.ADMIN,
+    UserTypes.ENDUSER,
+  ];
   const [formValues, setFormValues] = useState<Permission>({
     _id: permission?._id || "",
     title: permission?.title || "",
     subject: permission?.subject || "",
     actions: permission?.actions || actionsArr,
+    uType: permission?.uType || UserTypes.SUPERADMIN,
   });
 
   useEffect(() => {
@@ -57,15 +65,7 @@ export default function AddPermission({
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues({
       ...formValues,
-      [e.target.title]: e.target.value,
-    });
-  };
-
-  const handleActionsChange = (event: SelectChangeEvent<string[]>) => {
-    const { value } = event.target;
-    setFormValues({
-      ...formValues,
-      actions: typeof value === "string" ? value.split(",") : value, // Ensures an array is stored
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -96,7 +96,7 @@ export default function AddPermission({
           <Grid item xs={12} md={6}>
             <TextField
               label="Title"
-              title="title"
+              name="title"
               fullWidth
               margin="dense"
               size="small"
@@ -107,7 +107,7 @@ export default function AddPermission({
           <Grid item xs={12} md={6}>
             <TextField
               label="Subject"
-              title="subject"
+              name="subject"
               fullWidth
               margin="dense"
               size="small"
@@ -148,6 +148,34 @@ export default function AddPermission({
               </FormControl>
             </Grid>
           )}
+
+          <Grid item xs={12} md={6}>
+            <FormControl component="fieldset" fullWidth>
+              <FormLabel component="legend">User Type</FormLabel>
+              <FormGroup>
+                {userTypes.map((userType) => (
+                  <FormControlLabel
+                    key={userType}
+                    control={
+                      <Checkbox
+                        checked={formValues.uType === userType}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setFormValues({
+                              ...formValues,
+                              uType: userType, // Set the selected userType
+                            });
+                          }
+                        }}
+                        name="uType"
+                      />
+                    }
+                    label={userType}
+                  />
+                ))}
+              </FormGroup>
+            </FormControl>
+          </Grid>
 
           <Grid item xs={12} sx={{ display: "flex", justifyContent: "right" }}>
             <SolidButton type="submit" sx={{ maxWidth: 200 }}>

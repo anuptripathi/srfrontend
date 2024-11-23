@@ -189,7 +189,13 @@ export default function PermissionTablePage() {
         <>
           <StyledTable
             isLoading={isLoading}
-            columns={["Title", "Subject", "Allowed Actions", "Actions"]}
+            columns={[
+              "Title",
+              "Subject",
+              "Allowed Actions",
+              "UserType",
+              "Actions",
+            ]}
           >
             {permissions.map((permission, index) => (
               <TableRow
@@ -204,6 +210,9 @@ export default function PermissionTablePage() {
                 </TableCell>
                 <TableCell key={"col3" + permission._id}>
                   {permission.actions?.join(", ")}
+                </TableCell>
+                <TableCell key={"col4" + permission._id}>
+                  {permission.uType}
                 </TableCell>
                 <TableCell key={"col5" + permission._id}>
                   <IconButton

@@ -3,4 +3,5 @@ export interface Permission {
   title: string;
   subject: string;
   actions?: string[];
+  uType?: string;
 }
