@@ -28,8 +28,8 @@ export const routes = [
     icon: "GroupIcon",
   },
   {
-    title: "Permissions",
-    path: "/permissions",
+    title: "Roles",
+    path: "/roles",
     icon: "SettingsAccessibilityIcon",
   },
 ];
